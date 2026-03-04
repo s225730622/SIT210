@@ -1,6 +1,4 @@
-// TASK 1.1P
-// Design a system to switch ON the porch light and the hallway light when Linda presses the switch/push button.
-// The porch light should stay ON for 30 seconds and the hallway light on for 60 seconds. 
+// TASK 1.1P | Modular Programming
 
 int button = 2;
 int porchLight = 11;
@@ -13,7 +11,7 @@ void setup() {
 }
 
 void loop() {
-  // If button is pressed ON 
+  // If button is pressed ON
   if (digitalRead(button) == LOW)
   {
     // Turn porchLightPin ON for 30 seconds, then turn OFF
