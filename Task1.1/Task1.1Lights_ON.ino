@@ -1,27 +1,48 @@
 // TASK 1.1P | Modular Programming
 
-int button = 2;
-int porchLight = 11;
-int hallwayLight = 12;
+const int button = 2;
+const int porchLight = 10;
+const int hallwayLight = 12;
 
-void setup() {
-  pinMode(button, INPUT);
-  pinMode(porchLight, OUTPUT);
+unsigned long startMillis;
+unsigned long timeElapsed;
+const unsigned long porchLightOn = 30000;
+const unsigned long hallwayLightOn = 60000;
+
+bool lightsSwitchedOn = false;
+
+void setup() 
+{
+  pinMode(button, INPUT_PULLUP);
   pinMode(hallwayLight, OUTPUT);
+  pinMode(porchLight, OUTPUT);
 }
 
-void loop() {
-  // If button is pressed ON
-  if (digitalRead(button) == LOW)
+void loop() 
+{
+  int buttonState = digitalRead(button);
+  
+  if (buttonState == LOW && !lightsSwitchedOn)
   {
-    // Turn porchLightPin ON for 30 seconds, then turn OFF
-    digitalWrite(porchLight, HIGH);
-    delay(30000);
-    digitalWrite(porchLight, LOW);
+    lightsSwitchedOn = true;
+    startMillis = millis();
 
-    // Turn hallwayLightPin on for 60 seconds, then turn OFF
+    digitalWrite(porchLight, HIGH);
     digitalWrite(hallwayLight, HIGH);
-    delay(60000);
-    digitalWrite(hallwayLight, LOW);
+  }
+  if (lightsSwitchedOn)
+  {
+    timeElapsed = millis() - startMillis;
+
+    if (timeElapsed >= porchLightOn)
+    {
+      digitalWrite(porchLight, LOW);
+    }
+
+    if (timeElapsed >= hallwayLightOn)
+    {
+      digitalWrite(hallwayLight, LOW);
+      lightsSwitchedOn = false;
+    }
   }
 }
