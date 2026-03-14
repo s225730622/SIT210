@@ -10,7 +10,7 @@ WiFiClient client;
 
 char HOST_NAME[] = "maker.ifttt.com";
 String PATH_NAME_INSL = "/trigger/terrarium_in_sunlight/with/key/BDdfOQOwAwKA_e-QR5Kgr";
-String PATH_NAME_NOTINSL = "/trigger/terrarium_outof_sunlight/with/key/BDdfOQOwAwKA_e-QR5Kgr";
+String PATH_NAME_NOTINSL = "/trigger/terrarium_notin_sunlight/with/key/BDdfOQOwAwKA_e-QR5Kgr";
 String queryString = "?value1=57&value2=25";
 
 // Initialize BH15720 light meter
@@ -50,14 +50,11 @@ void loop()
   if (lx >= luxSunlightLvl && inSunlight == false)
   {
     isInSunlight();
-    inSunlight = true;
-    sunlightStops = true;
   }
   // Once the lx level drops back below the sunlight threshold level, another trigger HTTP request is sent
   if (lx < luxSunlightLvl && sunlightStops == true)
   {
     isOutOfSunlight();
-    sunlightStops = false;
   }
 
   // Wait 5 seconds for next reading
@@ -108,6 +105,8 @@ void isInSunlight()
   {
     Serial.println("Failed to connect to server!");
   }
+  inSunlight = true;
+  sunlightStops = true;
 }
 
 // Method that is called if lx level drops below the sunshine threshold
@@ -147,4 +146,6 @@ void isOutOfSunlight()
   {
     Serial.println("Failed to connect to server!");
   }
+  sunlightStops = false;
+  inSunlight = false;
 }
