@@ -109,7 +109,7 @@ void isInSunlight()
   sunlightStops = true;
 }
 
-// Method that is called if lx level drops below the sunshine threshold
+// Method that is called if lx level drops below the sunlight threshold
 void isOutOfSunlight()
 {
   // If light level is below threshold number, send HTTP request
