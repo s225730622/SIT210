@@ -12,8 +12,6 @@ void setup() {
   pinMode(button, INPUT_PULLUP);
   pinMode(porchLight, OUTPUT);
   pinMode(hallwayLight, OUTPUT);
-  
-  Serial.begin(9600);
 }
 
 void loop() {
@@ -44,8 +42,6 @@ bool checkButtonStatus() {
 void lightsON() {
   digitalWrite(porchLight, HIGH);
   digitalWrite(hallwayLight, HIGH);
-  // Turn lights on and print message
-  Serial.println("Porch and hallways lights turned on..");
 }
 
 // Turns porch and hallway lights off
@@ -53,10 +49,8 @@ void lightsOFF() {
   // Turn porch light off after 30 seconds 
   delay(30000);
   digitalWrite(porchLight, LOW);
-  Serial.println("Porch light turned off..");
 
   // Turn hallway light off after anolther 30 (totaling 60) seconds
   delay(30000);
   digitalWrite(hallwayLight, LOW);
-  Serial.println("Hallway light turned off..");
 }
