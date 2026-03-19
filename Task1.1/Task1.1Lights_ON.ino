@@ -1,48 +1,62 @@
-// TASK 1.1P | Modular Programming
+// TASK 1.1P
+// Design a system to switch ON the porch light and the hallway light when Linda presses the switch/push button.
+// The porch light should stay ON for 30 seconds and the hallway light on for 60 seconds. 
 
-const int button = 2;
-const int porchLight = 10;
-const int hallwayLight = 12;
+// Initialize any required variables and their respective pin locations
+int button = 2;
+int porchLight = 11;
+int hallwayLight = 12;
 
-unsigned long startMillis;
-unsigned long timeElapsed;
-const unsigned long porchLightOn = 30000;
-const unsigned long hallwayLightOn = 60000;
-
-bool lightsSwitchedOn = false;
-
-void setup() 
-{
+void setup() {
+  // Initialize button and pin modes as input/outputs
   pinMode(button, INPUT_PULLUP);
-  pinMode(hallwayLight, OUTPUT);
   pinMode(porchLight, OUTPUT);
+  pinMode(hallwayLight, OUTPUT);
+  
+  Serial.begin(9600);
 }
 
-void loop() 
-{
-  int buttonState = digitalRead(button);
-  
-  if (buttonState == LOW && !lightsSwitchedOn)
-  {
-    lightsSwitchedOn = true;
-    startMillis = millis();
-
-    digitalWrite(porchLight, HIGH);
-    digitalWrite(hallwayLight, HIGH);
+void loop() {
+  // Check button state
+  if (checkButtonStatus()) {
+    // If button is pressed, call method to turn both lights on 
+    lightsON();
+    // Then call method to turn lights off
+    lightsOFF();
   }
-  if (lightsSwitchedOn)
-  {
-    timeElapsed = millis() - startMillis;
+}
 
-    if (timeElapsed >= porchLightOn)
-    {
-      digitalWrite(porchLight, LOW);
-    }
-
-    if (timeElapsed >= hallwayLightOn)
-    {
-      digitalWrite(hallwayLight, LOW);
-      lightsSwitchedOn = false;
-    }
+// Checks state of button and returns boolean depending on status
+bool checkButtonStatus() {
+  // Initialize a variable for if the button is pressed or not
+  int state = digitalRead(button);
+  if(state == LOW) {
+    // Return true if button is pressed
+    return true;
   }
+  else {
+    // Otherwise return if button has not been pressed
+    return false;
+  }
+}
+
+// Turns porch and hallway lights on
+void lightsON() {
+  digitalWrite(porchLight, HIGH);
+  digitalWrite(hallwayLight, HIGH);
+  // Turn lights on and print message
+  Serial.println("Porch and hallways lights turned on..");
+}
+
+// Turns porch and hallway lights off
+void lightsOFF() {
+  // Turn porch light off after 30 seconds 
+  delay(30000);
+  digitalWrite(porchLight, LOW);
+  Serial.println("Porch light turned off..");
+
+  // Turn hallway light off after anolther 30 (totaling 60) seconds
+  delay(30000);
+  digitalWrite(hallwayLight, LOW);
+  Serial.println("Hallway light turned off..");
 }
