@@ -133,13 +133,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.print((char)payload[i]);
   }
   Serial.println();
-  // Switch LED on if the first character is present
-  if (strcmp(topic, "ES/Wave") == 0) {
-    lightsON();
-  }
-  else if (strcmp(topic, "ES/Pat") == 0) {
-    lightsOFF();
-  }
 }
 
 // Establish MQTT connection and sends message
