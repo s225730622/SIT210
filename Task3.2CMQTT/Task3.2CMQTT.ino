@@ -73,17 +73,15 @@ void loop () {
 
   int distance = readDistance(); 
 
-  // System detects wave and turns both LEDs on, then publishes a message to ES/Wave containing my name
+  // System detects wave and publishes a message to ES/Wave containing my name
   if (distance > 0 && distance <= movementThreshold && !sensorDetected) {
     sensorDetected = true;
     client.publish("ES/Wave", "Emily");
-    lightsON();
   }
-  // System detects pat and turns both LEDs off, then publishes a message to ES/Pat containing my name
+  // System detects pat and publishes a message to ES/Pat containing my name
   else if (distance > 0 && distance > movementThreshold && sensorDetected) {
     sensorDetected = false;
     client.publish("ES/Pat", "Emily");
-    lightsOFF();
   }
 
   // Delay to avoid overwhelming the sensor
@@ -133,6 +131,14 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.print((char)payload[i]);
   }
   Serial.println();
+
+  if (strcmp(topic, "ES/Wave") == 0) {
+    lightsON();
+  }
+
+  else if (strcmp(topic, "ES/Pat") == 0) {
+    lightsOFF();
+  }
 }
 
 // Establish MQTT connection and sends message
@@ -157,3 +163,9 @@ void reconnect() {
     }
   }
 }
+
+
+
+
+
+
