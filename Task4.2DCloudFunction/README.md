@@ -1,4 +1,4 @@
-# Task 4.2D - Calling a Functon from the Web #
+# Task 4.2D - Calling a Function from the Web #
 
 ### TASK DESCRIPTION ###
 Design a system which enables a user to remotely switch ON and OFF three seperate LED lights.<br/>
