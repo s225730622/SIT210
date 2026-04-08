@@ -1,0 +1,21 @@
+<RCC>
+  <qresource prefix="blueOn">
+    <file>blueLedON.png</file>
+  </qresource>
+  <qresource prefix="yellowOff">
+    <file>yellowLedOFF.png</file>
+  </qresource>
+  <qresource prefix="yellowOn">
+    <file>yellowLedON.png</file>
+  </qresource>
+  <qresource prefix="greenOn">
+    <file>greenLedON.png</file>
+  </qresource>
+  <qresource prefix="greenOff">
+    <file>greenLedOFF.png</file>
+  </qresource>
+  <qresource prefix="blueOff">
+    <file>Screenshot 2026-04-08 at 7.58.06 pm.png</file>
+    <file>blueLedOFF.png</file>
+  </qresource>
+</RCC>
