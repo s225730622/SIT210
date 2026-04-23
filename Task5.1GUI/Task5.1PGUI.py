@@ -1,5 +1,3 @@
-# Task 5.1P - Making a Graphical User Interface
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 import RPi.GPIO as GPIO
 import sys
@@ -43,7 +41,7 @@ class Ui_MainWindow(object):
 
         # Body label
         self.label2 = QtWidgets.QLabel(self.centralwidget)
-        self.label2.setGeometry(QtCore.QRect(100, 250, 550, 120))
+        self.label2.setGeometry(QtCore.QRect(100, 325, 550, 120))
         font2 = QtGui.QFont()
         font2.setPointSize(20)
         self.label2.setFont(font2)
@@ -51,7 +49,7 @@ class Ui_MainWindow(object):
         self.label2.setObjectName("label2")
 
         # Bathroom LED 
-        self.Bathroom = QtWidgets.QRadioButton(self.centralwidget)
+        self.Bathroom = QtWidgets.QCheckBox(self.centralwidget)
         self.Bathroom.setGeometry(QtCore.QRect(320, 210, 200, 50))
         font3 = QtGui.QFont()
         font3.setFamily("Segoe UI")
@@ -59,21 +57,18 @@ class Ui_MainWindow(object):
         font3.setWeight(75)
         self.Bathroom.setFont(font3)
         self.Bathroom.setObjectName("Bathroom")
-        self.Bathroom.setAutoExclusive(False)
         
         # Closet LED 
-        self.Closet = QtWidgets.QRadioButton(self.centralwidget)
+        self.Closet = QtWidgets.QCheckBox(self.centralwidget)
         self.Closet.setGeometry(QtCore.QRect(560, 210, 200, 50))
         self.Closet.setFont(font3)
         self.Closet.setObjectName("Closet")
-        self.Closet.setAutoExclusive(False)
 
         # Living Room LED 
-        self.LivingRoom = QtWidgets.QRadioButton(self.centralwidget)
+        self.LivingRoom = QtWidgets.QCheckBox(self.centralwidget)
         self.LivingRoom.setGeometry(QtCore.QRect(50, 210, 200, 50))
         self.LivingRoom.setFont(font3)
         self.LivingRoom.setObjectName("LivingRoom")
-        self.LivingRoom.setAutoExclusive(False)
 
         # Exit button
         self.exitButton = QtWidgets.QPushButton(self.centralwidget)
@@ -139,9 +134,9 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         # Checks if the living room light is on/off and calls the lightToggled method accordingly
-        self.LivingRoom.toggled.connect(lambda checked: self.lightToggled(self.LivingRoom, "Living Room", checked))
-        self.Bathroom.toggled.connect(lambda checked: self.lightToggled(self.Bathroom, "Bathroom", checked))
-        self.Closet.toggled.connect(lambda checked: self.lightToggled(self.Closet, "Closet", checked))
+        self.LivingRoom.clicked.connect(lambda checked: self.lightToggled(self.LivingRoom, "Living Room", checked))
+        self.Bathroom.clicked.connect(lambda checked: self.lightToggled(self.Bathroom, "Bathroom", checked))
+        self.Closet.clicked.connect(lambda checked: self.lightToggled(self.Closet, "Closet", checked))
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -171,15 +166,8 @@ class Ui_MainWindow(object):
 
     # Method which sends a signal to Raspberry Pi device to turn on an LED and all others off (if already on)
     def lightToggled(self, checkedBtn, room, checked):
-        # To use in for loop
-        ledBtns = [self.LivingRoom, self.Bathroom, self.Closet]
+
         if checked:
-            # Create a for loop which iterates through each light which hasnt been toggled on and blocks toggle signals to turn them off 
-            for ledBtn in ledBtns:
-                if ledBtn is not checkedBtn:
-                    ledBtn.blockSignals(True)
-                    ledBtn.setChecked(False)
-                    ledBtn.blockSignals(False)
             
             # Calls method which turns lights off
             self.turnLightsOff()
