@@ -36,7 +36,7 @@ void setup() {
   Serial.println("BH1750 started");
   } else {
   Serial.println("BH1750 failed to start");
-  }
+  } 
 
   // Attach interrupts
   attachInterrupt(digitalPinToInterrupt(switchPin), switchInterrupt, CHANGE);
@@ -80,6 +80,7 @@ void loop() {
   else {
     lightsOff();    // Turn LED lights OFF
   } 
+
   delay(100);
 }
 
