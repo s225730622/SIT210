@@ -5,5 +5,6 @@ Build a system using hardware interrupts to (a) switch ON the lights when Linda 
 
 ### SOLUTION CODE EXPLANATION ###
 * I have included all required libraries and declared all variables which will be referenced throughout the code
+* <i>Updated to include light sensor detecting dark environment which, when the motion sensor detects movement, turns the lights on</i>
 
 #### Link to Repository:  https://github.com/s225730622/SIT210 ####
