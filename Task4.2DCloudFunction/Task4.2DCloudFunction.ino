@@ -1,12 +1,21 @@
 // Task 4.2D - Calling Functions from the Web
 #include <WiFiNINA.h>
 #include <SPI.h>
+#include <PubSubClient.h>
 #include "arduino_secrets.h"
 
-// Wifi credentials (assigned in the arduino_secrets tab)
+// WiFi credentials (assigned in the arduino_secrets tab)
 char ssid[] = SECRET_SSID;    // Network SSID (name)
 char pass[] = SECRET_PASS;    // Network password
 WiFiServer server(80);
+
+WiFiClient wifiClient;
+PubSubClient mqttClient(wifiClient);
+
+// MQTT Details
+const char* mqttServer = "broker.emqx.io";
+const int mqttPort = 1883;
+const char* topic = "emily/lights";
 
 // Define pins for LEDs
 const int livingRoomLight = 10;
@@ -30,6 +39,50 @@ void connect_wifi() {
   server.begin();
 }
 
+// MQTT Callback >> Runs when Arduino receives a message
+void mqttCallback(char* receivedTopic, byte* payload, unsigned int length) {
+  String message = "";
+
+  for (int i = 0; i < length; i++) {
+    message += (char)payload[i];
+  }
+
+  Serial.print("MQTT message received: ");
+  Serial.println(message);
+
+  if (message == "living room") {
+    toggleLight("living room");
+  }
+
+  else if (message == "bathroom") {
+    toggleLight("bathroom");
+  }
+
+  else if (message == "closet") {
+    toggleLight("closet");
+  }
+}
+
+// Connect to MQTT Broker
+void connectMQTT() {
+  while (!mqttClient.connected()) {
+    Serial.println("Connecting to MQTT broker...");
+
+    if (mqttClient.connect("ECCAr_duino#33")) {
+      Serial.println("MQTT connected.");
+      mqttClient.subscribe(topic);
+
+      Serial.print("Subscribed to topic: ");
+      Serial.println(topic);
+    }
+    else {
+      Serial.print("MQTT failed, rc=");
+      Serial.println(mqttClient.state());
+      delay(2000);
+    }
+  }
+}
+
 void setup() {
   // Initialize serial and wait for port to open:
   Serial.begin(9600);
@@ -44,11 +97,22 @@ void setup() {
   digitalWrite(bathroomLight, LOW);
   digitalWrite(closetLight, LOW); 
 
-  // Connect to wifi
+  // Connect to WiFi
   connect_wifi();
+
+  // Setup MQTT after WiFi is connected
+  mqttClient.setServer(mqttServer, mqttPort);
+  mqttClient.setCallback(mqttCallback);
+  connectMQTT();
 }
 
 void loop() {
+  // Keep MQTT connection alive
+  if (!mqttClient.connected()) {
+    connectMQTT();
+  }
+  mqttClient.loop();
+
   WiFiClient client = server.available();
   if (!client)
     return;
