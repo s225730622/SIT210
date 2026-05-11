@@ -164,14 +164,11 @@ class Ui_MainWindow(object):
         self.yellowON.setVisible(self.Closet.isChecked())
         self.yellowOFF.setVisible(not self.Closet.isChecked())
 
-    # Method which sends a signal to Raspberry Pi device to turn on an LED and all others off (if already on)
+    # Method which toggles each selected LED on or off independently
     def lightToggled(self, checkedBtn, room, checked):
-
+        
         if checked:
             
-            # Calls method which turns lights off
-            self.turnLightsOff()
-
             # Turns Living Room lights on
             if room == "Living Room":
                 GPIO.output(LivingRoomPin, GPIO.HIGH)   # Sends signal to Raspberry Pi pin
